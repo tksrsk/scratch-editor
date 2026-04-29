@@ -234,6 +234,138 @@ export default [
         helpLink: 'https://scratch.mit.edu/microbit'
     },
     {
+        name: 'micro:bit（アクセル）',
+        extensionId: 'microbitAccelerator',
+        collaborator: 'micro:bit',
+        iconURL: microbitIconURL,
+        insetIconURL: microbitInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Connect your projects with the world."
+                description="Description for the 'micro:bit' extension"
+                id="gui.extension.microbit.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        bluetoothRequired: true,
+        internetConnectionRequired: true,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        connectionIconURL: microbitConnectionIconURL,
+        connectionSmallIconURL: microbitConnectionSmallIconURL,
+        prescanMessage: (
+            <FormattedMessage
+                defaultMessage="Turn on your micro:bit, then press the button below to start searching for your device."
+                description="Prompt before searching for a micro:bit"
+                id="gui.extension.microbit.prescanMessage"
+            />
+        ),
+        scanBeginMessage: (
+            <FormattedMessage
+                defaultMessage="Keep your micro:bit on and nearby."
+                description="Information shown while searching for a micro:bit, before one is found"
+                id="gui.extension.microbit.scanBeginMessage"
+            />
+        ),
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their micro:bit."
+                id="gui.extension.microbit.connectingMessage"
+            />
+        ),
+        helpLink: 'https://scratch.mit.edu/microbit'
+    },
+    {
+        name: 'micro:bit（ブレーキ）',
+        extensionId: 'microbitBrake',
+        collaborator: 'micro:bit',
+        iconURL: microbitIconURL,
+        insetIconURL: microbitInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Connect your projects with the world."
+                description="Description for the 'micro:bit' extension"
+                id="gui.extension.microbit.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        bluetoothRequired: true,
+        internetConnectionRequired: true,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        connectionIconURL: microbitConnectionIconURL,
+        connectionSmallIconURL: microbitConnectionSmallIconURL,
+        prescanMessage: (
+            <FormattedMessage
+                defaultMessage="Turn on your micro:bit, then press the button below to start searching for your device."
+                description="Prompt before searching for a micro:bit"
+                id="gui.extension.microbit.prescanMessage"
+            />
+        ),
+        scanBeginMessage: (
+            <FormattedMessage
+                defaultMessage="Keep your micro:bit on and nearby."
+                description="Information shown while searching for a micro:bit, before one is found"
+                id="gui.extension.microbit.scanBeginMessage"
+            />
+        ),
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their micro:bit."
+                id="gui.extension.microbit.connectingMessage"
+            />
+        ),
+        helpLink: 'https://scratch.mit.edu/microbit'
+    },
+    {
+        name: 'micro:bit（ハンドル）',
+        extensionId: 'microbitHandle',
+        collaborator: 'micro:bit',
+        iconURL: microbitIconURL,
+        insetIconURL: microbitInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Connect your projects with the world."
+                description="Description for the 'micro:bit' extension"
+                id="gui.extension.microbit.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        bluetoothRequired: true,
+        internetConnectionRequired: true,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        connectionIconURL: microbitConnectionIconURL,
+        connectionSmallIconURL: microbitConnectionSmallIconURL,
+        prescanMessage: (
+            <FormattedMessage
+                defaultMessage="Turn on your micro:bit, then press the button below to start searching for your device."
+                description="Prompt before searching for a micro:bit"
+                id="gui.extension.microbit.prescanMessage"
+            />
+        ),
+        scanBeginMessage: (
+            <FormattedMessage
+                defaultMessage="Keep your micro:bit on and nearby."
+                description="Information shown while searching for a micro:bit, before one is found"
+                id="gui.extension.microbit.scanBeginMessage"
+            />
+        ),
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their micro:bit."
+                id="gui.extension.microbit.connectingMessage"
+            />
+        ),
+        helpLink: 'https://scratch.mit.edu/microbit'
+    },
+    {
         name: 'Go Direct Force & Acceleration',
         extensionId: 'gdxfor',
         collaborator: 'Vernier',
