@@ -1086,7 +1086,7 @@ class Scratch3MicroBitBlocks {
                 (targetSpeed - speed) / 0.1
             );
         } else if (speed > targetSpeed) {
-            this._acceleration = -(0.8 + (0.015 * speed));
+            this._acceleration = -(1.5 + (0.03 * speed));
         } else {
             this._acceleration = 0;
         }

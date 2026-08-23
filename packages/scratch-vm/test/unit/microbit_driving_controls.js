@@ -72,7 +72,7 @@ test('released accelerator applies noticeable coasting resistance', t => {
     accelerator.updateAcceleration({CURRENT_SPEED: 100});
     t.ok(accelerator.getAcceleration() < 0);
     for (let i = 0; i < 20; i++) accelerator.updateAcceleration({CURRENT_SPEED: 100});
-    t.ok(accelerator.getAcceleration() < -2, 'coasting approaches more than 2 km/h/s resistance at 100 km/h');
+    t.ok(accelerator.getAcceleration() < -4, 'coasting exceeds 4 km/h/s resistance at 100 km/h');
     t.end();
 });
 
