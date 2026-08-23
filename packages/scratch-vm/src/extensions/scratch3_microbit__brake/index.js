@@ -10,7 +10,7 @@ const Base64Util = require('../../util/base64-util');
  * Icon png to be displayed at the left edge of each extension block, encoded as a data URI.
  * @type {string}
  */
-// eslint-disable-next-line @stylistic/max-len
+// eslint-disable-next-line max-len
 const blockIconURI = 'data:image/png;base64,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';
 
 /**
@@ -578,6 +578,12 @@ class Scratch3MicroBitBlocks {
 
         // Create a new MicroBit peripheral instance
         this._peripheral = new MicroBit(this.runtime, Scratch3MicroBitBlocks.EXTENSION_ID);
+
+        this._oneSecondStoppingSpeed = 100;
+        this._stoppingStrengthConfigured = false;
+        this._releasedAngle = null;
+        this._pressedAngle = null;
+        this._deceleration = 0;
     }
 
     /**
@@ -742,6 +748,59 @@ class Scratch3MicroBitBlocks {
                 },
                 '---',
                 {
+                    opcode: 'setStoppingStrength',
+                    text: '[STOPPING_SPEED] km/hを1秒で止められる強さにする',
+                    blockType: BlockType.COMMAND,
+                    arguments: {
+                        STOPPING_SPEED: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: 100
+                        }
+                    }
+                },
+                {
+                    opcode: 'recordReleasedAngle',
+                    text: '踏まないときの角度を記録する',
+                    blockType: BlockType.COMMAND
+                },
+                {
+                    opcode: 'waitForReleasedAngle',
+                    text: '踏んでいない位置が安定するまで待つ',
+                    blockType: BlockType.COMMAND
+                },
+                {
+                    opcode: 'recordPressedAngle',
+                    text: 'いっぱい踏んだときの角度を記録する',
+                    blockType: BlockType.COMMAND
+                },
+                {
+                    opcode: 'waitForPressedAngle',
+                    text: '踏み込み位置が安定するまで待つ',
+                    blockType: BlockType.COMMAND
+                },
+                {
+                    opcode: 'isReady',
+                    text: '準備ができた？',
+                    blockType: BlockType.BOOLEAN
+                },
+                {
+                    opcode: 'updateDeceleration',
+                    text: '現在の速度 [CURRENT_SPEED] km/hで更新する',
+                    blockType: BlockType.COMMAND,
+                    arguments: {
+                        CURRENT_SPEED: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: 0
+                        }
+                    }
+                },
+                {
+                    opcode: 'getDeceleration',
+                    text: '減速度',
+                    blockType: BlockType.REPORTER
+                },
+                '---',
+                {
                     opcode: 'whenPinConnected',
                     text: formatMessage({
                         id: 'microbit.whenPinConnected',
@@ -758,7 +817,13 @@ class Scratch3MicroBitBlocks {
                         }
                     }
                 }
-            ],
+            ].filter(block => typeof block !== 'string' && [
+                'setStoppingStrength',
+                'waitForReleasedAngle',
+                'waitForPressedAngle',
+                'updateDeceleration',
+                'getDeceleration'
+            ].includes(block.opcode)),
             menus: {
                 buttons: {
                     acceptReporters: true,
@@ -932,6 +997,84 @@ class Scratch3MicroBitBlocks {
      */
     getTiltAngle (args) {
         return this._getTiltAngle(args.DIRECTION);
+    }
+
+    setStoppingStrength (args) {
+        this._oneSecondStoppingSpeed = Math.max(1, cast.toNumber(args.STOPPING_SPEED));
+        this._stoppingStrengthConfigured = true;
+        this._deceleration = 0;
+    }
+
+    recordReleasedAngle () {
+        this._releasedAngle = this._getTiltAngle(MicroBitTiltDirection.BACK);
+    }
+
+    waitForReleasedAngle (args, util) {
+        const angle = this._getTiltAngle(MicroBitTiltDirection.BACK);
+        const frame = util.stackFrame;
+        if (typeof frame.lastAngle !== 'number' || Math.abs(angle - frame.lastAngle) > 1) {
+            frame.lastAngle = angle;
+            frame.stableSince = Date.now();
+        }
+        if (Date.now() - frame.stableSince >= 500) {
+            this._releasedAngle = angle;
+            this._pressedAngle = null;
+            return;
+        }
+        util.yield();
+    }
+
+    recordPressedAngle () {
+        this._pressedAngle = this._getTiltAngle(MicroBitTiltDirection.BACK);
+    }
+
+    waitForPressedAngle (args, util) {
+        const angle = this._getTiltAngle(MicroBitTiltDirection.BACK);
+        const frame = util.stackFrame;
+        if (typeof frame.lastAngle !== 'number') {
+            frame.lastAngle = angle;
+            frame.stableSince = Date.now();
+        }
+        if (Math.abs(angle - frame.lastAngle) > 1) {
+            frame.lastAngle = angle;
+            frame.stableSince = Date.now();
+        }
+        const movedEnough = this._releasedAngle !== null && Math.abs(angle - this._releasedAngle) >= 5;
+        if (movedEnough && Date.now() - frame.stableSince >= 500) {
+            this._pressedAngle = angle;
+            return;
+        }
+        util.yield();
+    }
+
+    isReady () {
+        return this._stoppingStrengthConfigured &&
+            this._releasedAngle !== null &&
+            this._pressedAngle !== null &&
+            Math.abs(this._pressedAngle - this._releasedAngle) >= 5;
+    }
+
+    _getPedalStrength () {
+        if (!this.isReady()) return 0;
+        const range = this._pressedAngle - this._releasedAngle;
+        const angle = this._getTiltAngle(MicroBitTiltDirection.BACK);
+        return Math.max(0, Math.min(1, (angle - this._releasedAngle) / range));
+    }
+
+    updateDeceleration (args) {
+        if (!this.isReady()) {
+            this._deceleration = 0;
+            return;
+        }
+        const speed = Math.max(0, cast.toNumber(args.CURRENT_SPEED));
+        const pedal = this._getPedalStrength();
+        const desiredDeceleration = Math.min(pedal * this._oneSecondStoppingSpeed, speed * 10);
+        this._deceleration += (desiredDeceleration - this._deceleration) * 0.25;
+        this._deceleration = Math.min(this._deceleration, speed * 10);
+    }
+
+    getDeceleration () {
+        return this.isReady() ? this._deceleration : 0;
     }
 
     /**
