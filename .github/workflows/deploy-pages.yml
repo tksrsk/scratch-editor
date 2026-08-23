@@ -31,6 +31,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build Scratch SVG renderer
+        run: npm run build --workspace=@scratch/scratch-svg-renderer
+
+      - name: Build Scratch renderer
+        run: npm run build --workspace=@scratch/scratch-render
+
       - name: Build Scratch VM
         run: npm run build --workspace=@scratch/scratch-vm
 
