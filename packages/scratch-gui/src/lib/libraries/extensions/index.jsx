@@ -207,7 +207,7 @@ export default [
         bluetoothRequired: true,
         internetConnectionRequired: true,
         launchPeripheralConnectionFlow: true,
-        useAutoScan: false,
+        useAutoScan: true,
         connectionIconURL: microbitConnectionIconURL,
         connectionSmallIconURL: microbitConnectionSmallIconURL,
         prescanMessage: (
@@ -251,7 +251,7 @@ export default [
         bluetoothRequired: true,
         internetConnectionRequired: true,
         launchPeripheralConnectionFlow: true,
-        useAutoScan: false,
+        useAutoScan: true,
         connectionIconURL: microbitConnectionIconURL,
         connectionSmallIconURL: microbitConnectionSmallIconURL,
         prescanMessage: (
@@ -295,7 +295,7 @@ export default [
         bluetoothRequired: true,
         internetConnectionRequired: true,
         launchPeripheralConnectionFlow: true,
-        useAutoScan: false,
+        useAutoScan: true,
         connectionIconURL: microbitConnectionIconURL,
         connectionSmallIconURL: microbitConnectionSmallIconURL,
         prescanMessage: (
@@ -339,7 +339,7 @@ export default [
         bluetoothRequired: true,
         internetConnectionRequired: true,
         launchPeripheralConnectionFlow: true,
-        useAutoScan: false,
+        useAutoScan: true,
         connectionIconURL: microbitConnectionIconURL,
         connectionSmallIconURL: microbitConnectionSmallIconURL,
         prescanMessage: (

@@ -3,7 +3,7 @@ const BlockType = require('../../extension-support/block-type');
 const log = require('../../util/log');
 const cast = require('../../util/cast');
 const formatMessage = require('format-message');
-const BLE = require('../../io/ble');
+const BLE = require('../../io/web-bluetooth');
 const Base64Util = require('../../util/base64-util');
 
 /**
