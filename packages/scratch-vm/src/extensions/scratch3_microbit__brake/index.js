@@ -1006,11 +1006,11 @@ class Scratch3MicroBitBlocks {
     }
 
     recordReleasedAngle () {
-        this._releasedAngle = this._getTiltAngle(MicroBitTiltDirection.BACK);
+        this._releasedAngle = this._getPedalAngle();
     }
 
     waitForReleasedAngle (args, util) {
-        const angle = this._getTiltAngle(MicroBitTiltDirection.BACK);
+        const angle = this._getPedalAngle();
         const frame = util.stackFrame;
         if (typeof frame.lastAngle !== 'number' || Math.abs(angle - frame.lastAngle) > 1) {
             frame.lastAngle = angle;
@@ -1025,11 +1025,11 @@ class Scratch3MicroBitBlocks {
     }
 
     recordPressedAngle () {
-        this._pressedAngle = this._getTiltAngle(MicroBitTiltDirection.BACK);
+        this._pressedAngle = this._getPedalAngle();
     }
 
     waitForPressedAngle (args, util) {
-        const angle = this._getTiltAngle(MicroBitTiltDirection.BACK);
+        const angle = this._getPedalAngle();
         const frame = util.stackFrame;
         if (typeof frame.lastAngle !== 'number') {
             frame.lastAngle = angle;
@@ -1057,8 +1057,26 @@ class Scratch3MicroBitBlocks {
     _getPedalStrength () {
         if (!this.isReady()) return 0;
         const range = this._pressedAngle - this._releasedAngle;
-        const angle = this._getTiltAngle(MicroBitTiltDirection.BACK);
+        const angle = this._getPedalAngle();
         return Math.max(0, Math.min(1, (angle - this._releasedAngle) / range));
+    }
+
+    /**
+     * Get the current pedal angle, using the down arrow as a virtual brake
+     * when the micro:bit is disconnected.
+     * @returns {number} - the current or virtual pedal angle.
+     * @private
+     */
+    _getPedalAngle () {
+        if (this._peripheral.isConnected()) {
+            return this._getTiltAngle(MicroBitTiltDirection.BACK);
+        }
+
+        const keyboard = this.runtime.ioDevices && this.runtime.ioDevices.keyboard;
+        const released = this._releasedAngle === null ? 0 : this._releasedAngle;
+        if (!keyboard || typeof keyboard.getKeyIsDown !== 'function' ||
+            !keyboard.getKeyIsDown('down arrow')) return released;
+        return this._pressedAngle === null ? released - 30 : this._pressedAngle;
     }
 
     updateDeceleration (args) {

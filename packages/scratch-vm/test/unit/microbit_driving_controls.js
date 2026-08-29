@@ -4,15 +4,22 @@ const Accelerator = require('../../src/extensions/scratch3_microbit__accelerator
 const Brake = require('../../src/extensions/scratch3_microbit__brake');
 const Handle = require('../../src/extensions/scratch3_microbit__handle');
 
-const runtime = () => ({
-    registerPeripheralExtension: () => {}
+const runtime = (keys = new Set()) => ({
+    registerPeripheralExtension: () => {},
+    ioDevices: {
+        keyboard: {
+            getKeyIsDown: key => keys.has(key)
+        }
+    }
 });
 
 const setBackAngle = (extension, degrees) => {
+    extension._peripheral.isConnected = () => true;
     extension._peripheral._sensors.tiltY = degrees * 10;
 };
 
 const setRightAngle = (extension, degrees) => {
+    extension._peripheral.isConnected = () => true;
     extension._peripheral._sensors.tiltX = degrees * 10;
 };
 
@@ -194,6 +201,68 @@ test('pedals can wait for the released position without user confirmation', t =>
     t.end();
 });
 
+test('pedals use arrow keys as virtual angles when disconnected', t => {
+    const completeWait = (extension, method) => {
+        const util = {
+            stackFrame: {},
+            yielded: false,
+            yield: () => {
+                util.yielded = true;
+            }
+        };
+        extension[method]({}, util);
+        util.yielded = false;
+        util.stackFrame.stableSince = Date.now() - 501;
+        extension[method]({}, util);
+    };
+
+    const acceleratorKeys = new Set();
+    const accelerator = new Accelerator(runtime(acceleratorKeys));
+    accelerator.setMaximumSpeed({MAX_SPEED: 150, SECONDS: 15});
+    completeWait(accelerator, 'waitForReleasedAngle');
+    acceleratorKeys.add('up arrow');
+    completeWait(accelerator, 'waitForPressedAngle');
+    t.equal(accelerator.isReady(), true);
+    t.equal(accelerator._getPedalStrength(), 1, 'up arrow fully presses the accelerator');
+    acceleratorKeys.clear();
+    t.equal(accelerator._getPedalStrength(), 0, 'releasing up arrow releases the accelerator');
+
+    const brakeKeys = new Set();
+    const brake = new Brake(runtime(brakeKeys));
+    brake.setStoppingStrength({STOPPING_SPEED: 100});
+    completeWait(brake, 'waitForReleasedAngle');
+    brakeKeys.add('down arrow');
+    completeWait(brake, 'waitForPressedAngle');
+    t.equal(brake.isReady(), true);
+    t.equal(brake._getPedalStrength(), 1, 'down arrow fully presses the brake');
+    brakeKeys.clear();
+    t.equal(brake._getPedalStrength(), 0, 'releasing down arrow releases the brake');
+    t.end();
+});
+
+test('pedals keep their configured range after a micro:bit disconnects', t => {
+    const acceleratorKeys = new Set(['up arrow']);
+    const accelerator = new Accelerator(runtime(acceleratorKeys));
+    accelerator.setMaximumSpeed({MAX_SPEED: 150, SECONDS: 15});
+    setBackAngle(accelerator, 20);
+    accelerator.recordReleasedAngle();
+    setBackAngle(accelerator, -20);
+    accelerator.recordPressedAngle();
+    accelerator._peripheral.isConnected = () => false;
+    t.equal(accelerator._getPedalStrength(), 1);
+
+    const brakeKeys = new Set(['down arrow']);
+    const brake = new Brake(runtime(brakeKeys));
+    brake.setStoppingStrength({STOPPING_SPEED: 100});
+    setBackAngle(brake, 15);
+    brake.recordReleasedAngle();
+    setBackAngle(brake, -25);
+    brake.recordPressedAngle();
+    brake._peripheral.isConnected = () => false;
+    t.equal(brake._getPedalStrength(), 1);
+    t.end();
+});
+
 test('handle exposes only waiting calibration and steering blocks', t => {
     const opcodes = new Handle(runtime()).getInfo().blocks.map(block => block.opcode);
     t.same(opcodes, [
@@ -270,6 +339,62 @@ test('handle waits for stable center, right, and opposite left positions', t => 
     const left = completeWait('waitForLeftAngle', 35);
     t.equal(left.yielded, false);
     t.equal(handle.isReady(), true);
+    t.equal(handle.getSteeringAmount(), -100);
+    t.end();
+});
+
+test('handle uses arrow keys as virtual angles when disconnected', t => {
+    const keys = new Set();
+    const handle = new Handle(runtime(keys));
+    const completeWait = method => {
+        const util = {
+            stackFrame: {},
+            yielded: false,
+            yield: () => {
+                util.yielded = true;
+            }
+        };
+        handle[method]({}, util);
+        util.yielded = false;
+        util.stackFrame.stableSince = Date.now() - 501;
+        handle[method]({}, util);
+        return util;
+    };
+
+    completeWait('waitForCenterAngle');
+    keys.add('right arrow');
+    completeWait('waitForRightAngle');
+    keys.delete('right arrow');
+    keys.add('left arrow');
+    completeWait('waitForLeftAngle');
+
+    t.equal(handle.isReady(), true);
+    t.equal(handle.getSteeringAmount(), -100, 'left arrow steers fully left');
+    keys.delete('left arrow');
+    keys.add('right arrow');
+    t.equal(handle.getSteeringAmount(), 100, 'right arrow steers fully right');
+    keys.add('left arrow');
+    t.equal(handle.getSteeringAmount(), 0, 'pressing both arrows returns to center');
+    keys.clear();
+    t.equal(handle.getSteeringAmount(), 0, 'releasing both arrows returns to center');
+    t.end();
+});
+
+test('handle keeps arrow-key directions after a configured micro:bit disconnects', t => {
+    const keys = new Set();
+    const handle = new Handle(runtime(keys));
+    setRightAngle(handle, 5);
+    handle.recordCenterAngle();
+    setRightAngle(handle, -25);
+    handle.recordRightAngle();
+    setRightAngle(handle, 35);
+    handle.recordLeftAngle();
+    handle._peripheral.isConnected = () => false;
+
+    keys.add('right arrow');
+    t.equal(handle.getSteeringAmount(), 100);
+    keys.clear();
+    keys.add('left arrow');
     t.equal(handle.getSteeringAmount(), -100);
     t.end();
 });

@@ -985,11 +985,11 @@ class Scratch3MicroBitBlocks {
     }
 
     recordCenterAngle () {
-        this._centerAngle = this._getTiltAngle(MicroBitTiltDirection.RIGHT);
+        this._centerAngle = this._getSteeringAngle();
     }
 
     waitForCenterAngle (args, util) {
-        const angle = this._getTiltAngle(MicroBitTiltDirection.RIGHT);
+        const angle = this._getSteeringAngle();
         if (this._waitForStableAngle(angle, util)) {
             this._centerAngle = angle;
             this._rightAngle = null;
@@ -998,11 +998,11 @@ class Scratch3MicroBitBlocks {
     }
 
     recordRightAngle () {
-        this._rightAngle = this._getTiltAngle(MicroBitTiltDirection.RIGHT);
+        this._rightAngle = this._getSteeringAngle();
     }
 
     waitForRightAngle (args, util) {
-        const angle = this._getTiltAngle(MicroBitTiltDirection.RIGHT);
+        const angle = this._getSteeringAngle();
         const movedEnough = this._centerAngle !== null && Math.abs(angle - this._centerAngle) >= 5;
         if (this._waitForStableAngle(angle, util, movedEnough)) {
             this._rightAngle = angle;
@@ -1011,11 +1011,11 @@ class Scratch3MicroBitBlocks {
     }
 
     recordLeftAngle () {
-        this._leftAngle = this._getTiltAngle(MicroBitTiltDirection.RIGHT);
+        this._leftAngle = this._getSteeringAngle();
     }
 
     waitForLeftAngle (args, util) {
-        const angle = this._getTiltAngle(MicroBitTiltDirection.RIGHT);
+        const angle = this._getSteeringAngle();
         const rightRange = this._rightAngle === null || this._centerAngle === null ?
             0 : this._rightAngle - this._centerAngle;
         const leftRange = this._centerAngle === null ? 0 : angle - this._centerAngle;
@@ -1051,7 +1051,7 @@ class Scratch3MicroBitBlocks {
 
     getSteeringAmount () {
         if (!this.isReady()) return 0;
-        const angle = this._getTiltAngle(MicroBitTiltDirection.RIGHT);
+        const angle = this._getSteeringAngle();
         const offset = angle - this._centerAngle;
         const rightRange = this._rightAngle - this._centerAngle;
         const leftRange = this._leftAngle - this._centerAngle;
@@ -1059,6 +1059,30 @@ class Scratch3MicroBitBlocks {
             (100 * offset / rightRange) :
             (-100 * offset / leftRange);
         return Math.max(-100, Math.min(100, amount));
+    }
+
+    /**
+     * Get the current steering angle from the micro:bit, or from the arrow keys
+     * when the micro:bit is disconnected.
+     * @returns {number} - the current or virtual steering angle.
+     * @private
+     */
+    _getSteeringAngle () {
+        if (this._peripheral.isConnected()) {
+            return this._getTiltAngle(MicroBitTiltDirection.RIGHT);
+        }
+
+        const keyboard = this.runtime.ioDevices && this.runtime.ioDevices.keyboard;
+        if (!keyboard || typeof keyboard.getKeyIsDown !== 'function') {
+            return this._centerAngle === null ? 0 : this._centerAngle;
+        }
+
+        const rightPressed = keyboard.getKeyIsDown('right arrow');
+        const leftPressed = keyboard.getKeyIsDown('left arrow');
+        const center = this._centerAngle === null ? 0 : this._centerAngle;
+        if (rightPressed === leftPressed) return center;
+        if (rightPressed) return this._rightAngle === null ? center + 30 : this._rightAngle;
+        return this._leftAngle === null ? center - 30 : this._leftAngle;
     }
 
     /**
